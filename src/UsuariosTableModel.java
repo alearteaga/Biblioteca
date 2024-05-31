@@ -8,8 +8,9 @@ public class UsuariosTableModel extends AbstractTableModel {
 
     public UsuariosTableModel(UsuarioDAO usuarioDAO) {
         try {
-            usuarios = (List<Usuario>) usuarioDAO.obtenerTodos();
+            usuarios = usuarioDAO.obtenerTodos();
         } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
@@ -44,7 +45,7 @@ public class UsuariosTableModel extends AbstractTableModel {
                 return usuario.getTelefono();
             case 5:
                 return usuario.getRol();
-            case 6:
+             case 6:
                 return usuario.getFechaRegistro();
             default:
                 return null;

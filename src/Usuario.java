@@ -6,9 +6,9 @@ public class Usuario {
     private String telefono;
     private String rol;
     private String fechaRegistro;
+    private String contraseña;
 
-    // Constructor
-    public Usuario(int idUsuario, String nombre, String apellidos, String email, String telefono, String rol, String fechaRegistro) {
+    public Usuario(int idUsuario, String nombre, String apellidos, String email, String telefono, String rol, String fechaRegistro, String contraseña) {
         this.idUsuario = idUsuario;
         this.nombre = nombre;
         this.apellidos = apellidos;
@@ -16,9 +16,11 @@ public class Usuario {
         this.telefono = telefono;
         this.rol = rol;
         this.fechaRegistro = fechaRegistro;
+        this.contraseña = contraseña;
     }
 
     // Getters y setters
+
     public int getIdUsuario() {
         return idUsuario;
     }
@@ -75,9 +77,19 @@ public class Usuario {
         this.fechaRegistro = fechaRegistro;
     }
 
+    public String getContraseña() {
+        return contraseña;
+    }
+
+    public void setContraseña(String contraseña) {
+        this.contraseña = contraseña;
+    }
+
+    // Resto de métodos...
+
     @Override
     public String toString() {
         return "Usuario [idUsuario=" + idUsuario + ", nombre=" + nombre + ", apellidos=" + apellidos + ", email=" + email
-                + ", telefono=" + telefono + ", rol=" + rol + ", fechaRegistro=" + fechaRegistro + "]";
+                + ", telefono=" + telefono + ", rol=" + rol + ", fechaRegistro=" + fechaRegistro + ", contraseña=" + contraseña + "]";
     }
 }

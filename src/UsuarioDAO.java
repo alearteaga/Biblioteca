@@ -2,6 +2,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UsuarioDAO {
@@ -12,7 +13,7 @@ public class UsuarioDAO {
     }
 
     public void agregarUsuario(Usuario usuario) throws SQLException {
-        String sql = "INSERT INTO usuarios (nombre, apellidos, email, telefono, rol, fecha_registro) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Usuarios (nombre, apellidos, email, telefono, rol, fechaRegistro, contraseña) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement statement = conexion.prepareStatement(sql)) {
             statement.setString(1, usuario.getNombre());
             statement.setString(2, usuario.getApellidos());
@@ -20,25 +21,28 @@ public class UsuarioDAO {
             statement.setString(4, usuario.getTelefono());
             statement.setString(5, usuario.getRol());
             statement.setString(6, usuario.getFechaRegistro());
+            statement.setString(7, usuario.getContraseña());
             statement.executeUpdate();
         }
     }
 
-    public Usuario iniciarSesion(String email, String password) throws SQLException {
-        String sql = "SELECT * FROM usuarios WHERE email = ? AND contraseña = ?";
+    public Usuario iniciarSesion(String usernameOrEmail, String password) throws SQLException {
+        String sql = "SELECT * FROM Usuarios WHERE (email = ? OR nombre = ?) AND contraseña = ?";
         try (PreparedStatement statement = conexion.prepareStatement(sql)) {
-            statement.setString(1, email);
-            statement.setString(2, password);
+            statement.setString(1, usernameOrEmail);
+            statement.setString(2, usernameOrEmail);
+            statement.setString(3, password);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 return new Usuario(
-                        resultSet.getInt("id_usuario"),
+                        resultSet.getInt("idUsuario"),
                         resultSet.getString("nombre"),
                         resultSet.getString("apellidos"),
                         resultSet.getString("email"),
                         resultSet.getString("telefono"),
                         resultSet.getString("rol"),
-                        resultSet.getString("fecha_registro")
+                        resultSet.getString("fechaRegistro"),
+                        resultSet.getString("contraseña")
                 );
             } else {
                 return null;
@@ -47,7 +51,24 @@ public class UsuarioDAO {
     }
     
     public List<Usuario> obtenerTodos() throws SQLException {
-        return null;
-        // Método para obtener todos los usuarios
+        List<Usuario> usuarios = new ArrayList<>();
+        String sql = "SELECT * FROM Usuarios";
+        try (PreparedStatement statement = conexion.prepareStatement(sql)) {
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Usuario usuario = new Usuario(
+                        resultSet.getInt("idUsuario"),
+                        resultSet.getString("nombre"),
+                        resultSet.getString("apellidos"),
+                        resultSet.getString("email"),
+                        resultSet.getString("telefono"),
+                        resultSet.getString("rol"),
+                        resultSet.getString("fechaRegistro"),
+                        resultSet.getString("contraseña")
+                );
+                usuarios.add(usuario);
+            }
+        }
+        return usuarios;
     }
 }

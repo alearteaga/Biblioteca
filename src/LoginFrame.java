@@ -5,53 +5,57 @@ import java.sql.SQLException;
 import javax.swing.*;
 
 public class LoginFrame extends JFrame {
-    private final JTextField emailField;
-    private final JPasswordField passwordField;
     private final UsuarioDAO usuarioDAO;
+    private final JTextField usernameField;
+    private final JPasswordField passwordField;
 
-    public LoginFrame(Connection conexion) {
-        // Configuración de la ventana de inicio de sesión
+    public LoginFrame(UsuarioDAO usuarioDAO) {
+        this.usuarioDAO = usuarioDAO;
+
         setTitle("Inicio de Sesión");
-        setSize(400, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
+        setSize(300, 150);
+        setLayout(new GridLayout(3, 1));
 
-        this.usuarioDAO = new UsuarioDAO(conexion);
+        JPanel usernamePanel = new JPanel();
+        JLabel usernameLabel = new JLabel("Usuario o Email:");
+        usernameField = new JTextField(15);
+        usernamePanel.add(usernameLabel);
+        usernamePanel.add(usernameField);
 
-        // Panel de formulario de inicio de sesión
-        JPanel loginPanel = new JPanel(new GridLayout(3, 2));
-        loginPanel.add(new JLabel("Email:"));
-        emailField = new JTextField();
-        loginPanel.add(emailField);
-        loginPanel.add(new JLabel("Contraseña:"));
-        passwordField = new JPasswordField();
-        loginPanel.add(passwordField);
+        JPanel passwordPanel = new JPanel();
+        JLabel passwordLabel = new JLabel("Contraseña:");
+        passwordField = new JPasswordField(15);
+        passwordPanel.add(passwordLabel);
+        passwordPanel.add(passwordField);
 
-        // Botón de inicio de sesión
+        JPanel buttonPanel = new JPanel();
         JButton loginButton = new JButton("Iniciar Sesión");
-        loginButton.addActionListener((ActionEvent e) -> {
-            iniciarSesion();
+        loginButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                iniciarSesion();
+            }
         });
-        loginPanel.add(loginButton);
+        buttonPanel.add(loginButton);
 
-        add(loginPanel, BorderLayout.CENTER);
+        add(usernamePanel);
+        add(passwordPanel);
+        add(buttonPanel);
     }
 
     private void iniciarSesion() {
-        String email = emailField.getText();
+        String usernameOrEmail = usernameField.getText();
         String password = new String(passwordField.getPassword());
 
         try {
-            Usuario usuario = usuarioDAO.iniciarSesion(email, password);
+            Usuario usuario = usuarioDAO.iniciarSesion(usernameOrEmail, password);
             if (usuario != null) {
                 JOptionPane.showMessageDialog(this, "Inicio de sesión exitoso", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                dispose(); // Cerrar la ventana de inicio de sesión
-                new BibliotecaGUI(null); // Abrir la ventana principal de la biblioteca
             } else {
-                JOptionPane.showMessageDialog(this, "Email o contraseña incorrectos", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Credenciales incorrectas", "Error", JOptionPane.ERROR_MESSAGE);
             }
-        } catch (SQLException e) {
+        } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Error al iniciar sesión", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-}

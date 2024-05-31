@@ -58,8 +58,9 @@ public class UsuariosPanel extends JPanel {
         String telefono = telefonoField.getText();
         String rol = rolField.getText();
         String fechaRegistro = fechaRegistroField.getText();
+        String contraseña = JOptionPane.showInputDialog(this, "Ingrese la contraseña:");
 
-        Usuario usuario = new Usuario(0, nombre, apellidos, email, telefono, rol, fechaRegistro);
+        Usuario usuario = new Usuario(0, nombre, apellidos, email, telefono, rol, fechaRegistro, contraseña);
 
         try {
             usuarioDAO.agregarUsuario(usuario);
