@@ -1,61 +1,74 @@
-import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.*;
 
 public class LoginFrame extends JFrame {
-    private final UsuarioDAO usuarioDAO;
+    private final Connection connection;
     private final JTextField usernameField;
     private final JPasswordField passwordField;
 
-    public LoginFrame(UsuarioDAO usuarioDAO) {
-        this.usuarioDAO = usuarioDAO;
+    public LoginFrame(Connection connection) {
+        this.connection = connection;
 
-        setTitle("Inicio de Sesión");
+        setTitle("Inicio de sesión");
+        setSize(300, 200);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(300, 150);
-        setLayout(new GridLayout(3, 1));
+        setLocationRelativeTo(null);
 
-        JPanel usernamePanel = new JPanel();
-        JLabel usernameLabel = new JLabel("Usuario o Email:");
-        usernameField = new JTextField(15);
-        usernamePanel.add(usernameLabel);
-        usernamePanel.add(usernameField);
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
-        JPanel passwordPanel = new JPanel();
+        JLabel usernameLabel = new JLabel("Nombre de usuario:");
+        usernameField = new JTextField();
+        panel.add(usernameLabel);
+        panel.add(usernameField);
+
         JLabel passwordLabel = new JLabel("Contraseña:");
-        passwordField = new JPasswordField(15);
-        passwordPanel.add(passwordLabel);
-        passwordPanel.add(passwordField);
+        passwordField = new JPasswordField();
+        panel.add(passwordLabel);
+        panel.add(passwordField);
 
-        JPanel buttonPanel = new JPanel();
-        JButton loginButton = new JButton("Iniciar Sesión");
-        loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                iniciarSesion();
-            }
-        });
-        buttonPanel.add(loginButton);
+        JButton loginButton = new JButton("Iniciar sesión");
+        loginButton.addActionListener(e -> login());
+        panel.add(loginButton);
 
-        add(usernamePanel);
-        add(passwordPanel);
-        add(buttonPanel);
+        add(panel);
     }
 
-    private void iniciarSesion() {
-        String usernameOrEmail = usernameField.getText();
-        String password = new String(passwordField.getPassword());
+    private void login() {
+        String username = usernameField.getText();
+        char[] passwordChars = passwordField.getPassword();
+        String password = new String(passwordChars);
 
-        try {
-            Usuario usuario = usuarioDAO.iniciarSesion(usernameOrEmail, password);
-            if (usuario != null) {
-                JOptionPane.showMessageDialog(this, "Inicio de sesión exitoso", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(this, "Credenciales incorrectas", "Error", JOptionPane.ERROR_MESSAGE);
+        // Validar credenciales en la base de datos
+        String query = "SELECT * FROM Usuarios WHERE username = ? AND password = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, username);
+            statement.setString(2, password);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    // Credenciales válidas, abrir la ventana principal de la biblioteca
+                    dispose(); // Cerrar la ventana de inicio de sesión
+                    new BibliotecaGUI(connection).setVisible(true);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Credenciales incorrectas", "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, "Error al iniciar sesión", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error al conectar a la base de datos", "Error", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
         }
     }
+
+    public static void main(String[] args) {
+        try {
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/biblioteca", "usuario", "contraseña");
+            SwingUtilities.invokeLater(() -> new LoginFrame(connection).setVisible(true));
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al conectar a la base de datos", "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }
+}
