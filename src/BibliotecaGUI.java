@@ -30,7 +30,7 @@ public class BibliotecaGUI extends JFrame {
 
     public static void main(String[] args) {
         try {
-            Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/biblioteca", "usuario", "contraseña");
+            Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/biblioteca", "root", "contraseña");
             SwingUtilities.invokeLater(() -> new LoginFrame(conexion).setVisible(true));
         } catch (SQLException e) {
             e.printStackTrace();
