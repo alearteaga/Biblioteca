@@ -1,17 +1,17 @@
 import javax.swing.table.AbstractTableModel;
 import java.util.List;
 
-public class PrestamoTableModel extends AbstractTableModel {
-    private List<Prestamo> prestamos;
-    private final String[] columnNames = {"ID", "Usuario", "Libro", "Fecha de Préstamo", "Fecha de Devolución", "Fecha de Devolución Real"};
+public class UsuarioTableModel extends AbstractTableModel {
+    private List<Usuario> usuarios;
+    private final String[] columnNames = {"ID", "Nombre", "Apellidos", "Email", "Teléfono", "Rol", "Fecha de Registro"};
 
-    public PrestamoTableModel(List<Prestamo> prestamos) {
-        this.prestamos = prestamos;
+    public UsuarioTableModel(List<Usuario> usuarios) {
+        this.usuarios = usuarios;
     }
 
     @Override
     public int getRowCount() {
-        return prestamos.size();
+        return usuarios.size();
     }
 
     @Override
@@ -21,20 +21,22 @@ public class PrestamoTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        Prestamo prestamo = prestamos.get(rowIndex);
+        Usuario usuario = usuarios.get(rowIndex);
         switch (columnIndex) {
             case 0:
-                return prestamo.getId();
+                return usuario.getId();
             case 1:
-                return prestamo.getUsuarioId();
+                return usuario.getNombre();
             case 2:
-                return prestamo.getLibroId();
+                return usuario.getApellidos();
             case 3:
-                return prestamo.getFechaPrestamo();
+                return usuario.getEmail();
             case 4:
-                return prestamo.getFechaRetornoPrevista();
+                return usuario.getTelefono();
             case 5:
-                return prestamo.getFechaRetornoReal();
+                return usuario.getRol();
+            case 6:
+                return usuario.getFechaRegistro();
             default:
                 return null;
         }
@@ -45,12 +47,12 @@ public class PrestamoTableModel extends AbstractTableModel {
         return columnNames[column];
     }
 
-    public List<Prestamo> getPrestamos() {
-        return prestamos;
+    public List<Usuario> getUsuarios() {
+        return usuarios;
     }
 
-    public void setPrestamos(List<Prestamo> prestamos) {
-        this.prestamos = prestamos;
+    public void setUsuarios(List<Usuario> usuarios) {
+        this.usuarios = usuarios;
         fireTableDataChanged();
     }
 }
