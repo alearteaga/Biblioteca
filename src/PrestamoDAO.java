@@ -23,7 +23,9 @@ public class PrestamoDAO {
                         rs.getInt("usuarioId"),
                         rs.getInt("libroId"),
                         rs.getDate("fechaPrestamo"),
-                        rs.getDate("fechaDevolucion")
+                        rs.getDate("fechaRetornoPrevista"),
+                        rs.getDate("fechaRetornoReal"),
+                        rs.getString("estado")
                 );
                 prestamos.add(prestamo);
             }

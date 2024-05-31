@@ -22,8 +22,11 @@ public class LibroDAO {
                         rs.getInt("id"),
                         rs.getString("titulo"),
                         rs.getString("autor"),
+                        rs.getString("isbn"),
                         rs.getString("editorial"),
-                        rs.getDate("fechaPublicacion")
+                        rs.getInt("anoPublicacion"),
+                        rs.getString("categoria"),
+                        rs.getString("estado")
                 );
                 libros.add(libro);
             }

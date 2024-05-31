@@ -5,14 +5,18 @@ public class Prestamo {
     private int usuarioId;
     private int libroId;
     private Date fechaPrestamo;
-    private Date fechaDevolucion;
+    private Date fechaRetornoPrevista;
+    private Date fechaRetornoReal;
+    private String estado;
 
-    public Prestamo(int id, int usuarioId, int libroId, Date fechaPrestamo, Date fechaDevolucion) {
+    public Prestamo(int id, int usuarioId, int libroId, Date fechaPrestamo, Date fechaRetornoPrevista, Date fechaRetornoReal, String estado) {
         this.id = id;
         this.usuarioId = usuarioId;
         this.libroId = libroId;
         this.fechaPrestamo = fechaPrestamo;
-        this.fechaDevolucion = fechaDevolucion;
+        this.fechaRetornoPrevista = fechaRetornoPrevista;
+        this.fechaRetornoReal = fechaRetornoReal;
+        this.estado = estado;
     }
 
     public int getId() {
@@ -31,7 +35,15 @@ public class Prestamo {
         return fechaPrestamo;
     }
 
-    public Date getFechaDevolucion() {
-        return fechaDevolucion;
+    public Date getFechaRetornoPrevista() {
+        return fechaRetornoPrevista;
+    }
+
+    public Date getFechaRetornoReal() {
+        return fechaRetornoReal;
+    }
+
+    public String getEstado() {
+        return estado;
     }
 }

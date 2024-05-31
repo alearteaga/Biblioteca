@@ -1,18 +1,22 @@
-import java.util.Date;
-
 public class Libro {
     private int id;
     private String titulo;
     private String autor;
+    private String isbn;
     private String editorial;
-    private Date fechaPublicacion;
+    private int anoPublicacion;
+    private String categoria;
+    private String estado;
 
-    public Libro(int id, String titulo, String autor, String editorial, Date fechaPublicacion) {
+    public Libro(int id, String titulo, String autor, String isbn, String editorial, int anoPublicacion, String categoria, String estado) {
         this.id = id;
         this.titulo = titulo;
         this.autor = autor;
+        this.isbn = isbn;
         this.editorial = editorial;
-        this.fechaPublicacion = fechaPublicacion;
+        this.anoPublicacion = anoPublicacion;
+        this.categoria = categoria;
+        this.estado = estado;
     }
 
     public int getId() {
@@ -27,11 +31,23 @@ public class Libro {
         return autor;
     }
 
+    public String getIsbn() {
+        return isbn;
+    }
+
     public String getEditorial() {
         return editorial;
     }
 
-    public Date getFechaPublicacion() {
-        return fechaPublicacion;
+    public int getAnoPublicacion() {
+        return anoPublicacion;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public String getEstado() {
+        return estado;
     }
 }
