@@ -8,7 +8,7 @@ public class BibliotecaGUI extends JFrame {
     private final PrestamosPanel prestamosPanel;
     private final UsuariosPanel usuariosPanel;
 
-    public BibliotecaGUI(LibroDAO libroDAO, PrestamoDAO prestamoDAO, UsuarioDAO usuarioDAO) {
+    public BibliotecaGUI(LibroDAO libroDAO, PrestamoDAO prestamoDAO, UsuarioDAO usuarioDAO, Connection conexion) {
         // Configuración de la ventana principal
         setTitle("Biblioteca");
         setSize(800, 600);
@@ -71,7 +71,7 @@ public class BibliotecaGUI extends JFrame {
         adminButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new AdminFrame().setVisible(true);
+                new AdminFrame(conexion).setVisible(true);
             }
         });
         menuBar.add(Box.createHorizontalGlue()); // Alinear el botón a la derecha
@@ -90,12 +90,19 @@ public class BibliotecaGUI extends JFrame {
             @Override
             public void run() {
                 try {
-                    BibliotecaGUI frame = new BibliotecaGUI(libroDAO, prestamoDAO, usuarioDAO);
+                    Connection conexion = obtenerConexion(); // Asegúrate de obtener la conexión aquí
+                    BibliotecaGUI frame = new BibliotecaGUI(libroDAO, prestamoDAO, usuarioDAO, conexion);
                     frame.setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         });
+    }
+
+    // Método ficticio para obtener la conexión a la base de datos
+    private static Connection obtenerConexion() {
+        // Lógica para obtener la conexión
+        return null;
     }
 }

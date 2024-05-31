@@ -50,7 +50,7 @@ public class LoginFrame extends JFrame {
 
                     if (resultSet.next()) {
                         // Si las credenciales son válidas, abrir la ventana principal
-                        new BibliotecaGUI(conexion).setVisible(true);
+                        new BibliotecaGUI(libroDAO, prestamoDAO, usuarioDAO, conexion).setVisible(true);
                         dispose();
                     } else {
                         JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos", "Error", JOptionPane.ERROR_MESSAGE);
