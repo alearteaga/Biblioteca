@@ -33,21 +33,64 @@ public class LibrosPanel extends JPanel {
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Lógica para añadir un libro
+                AddLibroDialog dialog = new AddLibroDialog();
+                dialog.setVisible(true);
+                Libro nuevoLibro = dialog.getLibro();
+                if (nuevoLibro != null) {
+                    try {
+                        libroDAO.agregarLibro(nuevoLibro);
+                        actualizarTabla();
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                        JOptionPane.showMessageDialog(null, "Error al agregar el libro: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
             }
         });
 
         editButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Lógica para editar un libro
+                int filaSeleccionada = table.getSelectedRow();
+                if (filaSeleccionada != -1) {
+                    Libro libroSeleccionado = tableModel.getLibros().get(filaSeleccionada);
+                    EditLibroDialog dialog = new EditLibroDialog(libroSeleccionado);
+                    dialog.setVisible(true);
+                    Libro libroEditado = dialog.getLibro();
+                    if (libroEditado != null) {
+                        try {
+                            libroDAO.actualizarLibro(libroEditado);
+                            actualizarTabla();
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                            JOptionPane.showMessageDialog(null, "Error al actualizar el libro: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Selecciona un libro para editar", "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Lógica para eliminar un libro
+                int filaSeleccionada = table.getSelectedRow();
+                if (filaSeleccionada != -1) {
+                    Libro libroSeleccionado = tableModel.getLibros().get(filaSeleccionada);
+                    int confirmacion = JOptionPane.showConfirmDialog(null, "¿Estás seguro de eliminar este libro?");
+                    if (confirmacion == JOptionPane.YES_OPTION) {
+                        try {
+                            libroDAO.eliminarLibro(libroSeleccionado.getId());
+                            actualizarTabla();
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                            JOptionPane.showMessageDialog(null, "Error al eliminar el libro: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Selecciona un libro para eliminar", "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
     }
@@ -57,7 +100,13 @@ public class LibrosPanel extends JPanel {
             return libroDAO.obtenerLibros();
         } catch (SQLException e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error al obtener los libros: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             return null;
         }
+    }
+
+    private void actualizarTabla() {
+        tableModel.setLibros(getLibros());
+        tableModel.fireTableDataChanged();
     }
 }

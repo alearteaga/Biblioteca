@@ -33,21 +33,64 @@ public class UsuariosPanel extends JPanel {
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Lógica para añadir un usuario
+                AddUsuarioDialog dialog = new AddUsuarioDialog();
+                dialog.setVisible(true);
+                Usuario nuevoUsuario = dialog.getUsuario();
+                if (nuevoUsuario != null) {
+                    try {
+                        usuarioDAO.agregarUsuario(nuevoUsuario);
+                        actualizarTabla();
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                        JOptionPane.showMessageDialog(null, "Error al agregar el usuario: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
             }
         });
 
         editButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Lógica para editar un usuario
+                int filaSeleccionada = table.getSelectedRow();
+                if (filaSeleccionada != -1) {
+                    Usuario usuarioSeleccionado = tableModel.getUsuarios().get(filaSeleccionada);
+                    EditUsuarioDialog dialog = new EditUsuarioDialog(usuarioSeleccionado);
+                    dialog.setVisible(true);
+                    Usuario usuarioEditado = dialog.getUsuario();
+                    if (usuarioEditado != null) {
+                        try {
+                            usuarioDAO.actualizarUsuario(usuarioEditado);
+                            actualizarTabla();
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                            JOptionPane.showMessageDialog(null, "Error al actualizar el usuario: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Selecciona un usuario para editar", "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Lógica para eliminar un usuario
+                int filaSeleccionada = table.getSelectedRow();
+                if (filaSeleccionada != -1) {
+                    Usuario usuarioSeleccionado = tableModel.getUsuarios().get(filaSeleccionada);
+                    int confirmacion = JOptionPane.showConfirmDialog(null, "¿Estás seguro de eliminar este usuario?");
+                    if (confirmacion == JOptionPane.YES_OPTION) {
+                        try {
+                            usuarioDAO.eliminarUsuario(usuarioSeleccionado.getId());
+                            actualizarTabla();
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                            JOptionPane.showMessageDialog(null, "Error al eliminar el usuario: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Selecciona un usuario para eliminar", "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
     }
@@ -57,7 +100,13 @@ public class UsuariosPanel extends JPanel {
             return usuarioDAO.obtenerUsuarios();
         } catch (SQLException e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error al obtener los usuarios: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             return null;
         }
+    }
+
+    private void actualizarTabla() {
+        tableModel.setUsuarios(getUsuarios());
+        tableModel.fireTableDataChanged();
     }
 }
