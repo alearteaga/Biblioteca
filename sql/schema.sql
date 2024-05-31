@@ -34,4 +34,10 @@ CREATE TABLE Prestamos (
     FOREIGN KEY (libroId) REFERENCES Libros(id)
 );
 
+CREATE TABLE Credenciales (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario VARCHAR(255) NOT NULL UNIQUE,
+    contrasena VARCHAR(255) NOT NULL
+);
+
 INSERT INTO Usuarios (nombre, apellidos, email, telefono, rol) VALUES ('Admin', 'Admin', 'admin@biblioteca.com', '123456789', 'admin');
