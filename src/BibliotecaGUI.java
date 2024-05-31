@@ -66,6 +66,17 @@ public class BibliotecaGUI extends JFrame {
         menu.add(usuariosMenuItem);
         menuBar.add(menu);
 
+        // Agregar el botón "Administrador" al menú
+        JButton adminButton = new JButton("Administrador");
+        adminButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new AdminFrame().setVisible(true);
+            }
+        });
+        menuBar.add(Box.createHorizontalGlue()); // Alinear el botón a la derecha
+        menuBar.add(adminButton);
+
         setJMenuBar(menuBar);
     }
 
