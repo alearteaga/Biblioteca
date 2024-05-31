@@ -2,61 +2,63 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class AddPrestamoDialog extends JDialog {
-    private JComboBox<Usuario> usuarioComboBox;
-    private JComboBox<Libro> libroComboBox;
-    private JTextField fechaPrestamoField;
-    private JTextField fechaDevolucionField;
-    private JButton okButton;
-    private JButton cancelButton;
+    private JTextField usuarioIdField, libroIdField, fechaPrestamoField, fechaRetornoPrevistaField, estadoField;
     private Prestamo prestamo;
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-    public AddPrestamoDialog(List<Usuario> usuarios, List<Libro> libros) {
+    public AddPrestamoDialog() {
         setTitle("Añadir Préstamo");
-        initUI(usuarios, libros);
-    }
+        setSize(400, 300);
+        setLayout(new GridLayout(6, 2));
 
-    private void initUI(List<Usuario> usuarios, List<Libro> libros) {
-        setLayout(new GridLayout(5, 2));
+        add(new JLabel("ID Usuario:"));
+        usuarioIdField = new JTextField();
+        add(usuarioIdField);
 
-        add(new JLabel("Usuario:"));
-        usuarioComboBox = new JComboBox<>(usuarios.toArray(new Usuario[0]));
-        add(usuarioComboBox);
+        add(new JLabel("ID Libro:"));
+        libroIdField = new JTextField();
+        add(libroIdField);
 
-        add(new JLabel("Libro:"));
-        libroComboBox = new JComboBox<>(libros.toArray(new Libro[0]));
-        add(libroComboBox);
-
-        add(new JLabel("Fecha de Préstamo:"));
+        add(new JLabel("Fecha de Préstamo (yyyy-MM-dd):"));
         fechaPrestamoField = new JTextField();
         add(fechaPrestamoField);
 
-        add(new JLabel("Fecha de Devolución:"));
-        fechaDevolucionField = new JTextField();
-        add(fechaDevolucionField);
+        add(new JLabel("Fecha de Retorno Prevista (yyyy-MM-dd):"));
+        fechaRetornoPrevistaField = new JTextField();
+        add(fechaRetornoPrevistaField);
 
-        okButton = new JButton("OK");
-        cancelButton = new JButton("Cancel");
+        add(new JLabel("Estado:"));
+        estadoField = new JTextField();
+        add(estadoField);
 
-        add(okButton);
-        add(cancelButton);
-
-        okButton.addActionListener(new ActionListener() {
+        JButton addButton = new JButton("Añadir");
+        addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (validateFields()) {
-                    prestamo = new Prestamo();
-                    prestamo.setUsuario((Usuario) usuarioComboBox.getSelectedItem());
-                    prestamo.setLibro((Libro) libroComboBox.getSelectedItem());
-                    prestamo.setFechaPrestamo(fechaPrestamoField.getText());
-                    prestamo.setFechaDevolucion(fechaDevolucionField.getText());
+                try {
+                    prestamo = new Prestamo(
+                            0, // ID will be assigned by the database
+                            Integer.parseInt(usuarioIdField.getText()),
+                            Integer.parseInt(libroIdField.getText()),
+                            dateFormat.parse(fechaPrestamoField.getText()),
+                            dateFormat.parse(fechaRetornoPrevistaField.getText()),
+                            null, // Fecha de Retorno Real will be null initially
+                            estadoField.getText()
+                    );
                     dispose();
+                } catch (ParseException ex) {
+                    JOptionPane.showMessageDialog(null, "Error en el formato de la fecha: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
+        add(addButton);
 
+        JButton cancelButton = new JButton("Cancelar");
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -64,18 +66,7 @@ public class AddPrestamoDialog extends JDialog {
                 dispose();
             }
         });
-
-        pack();
-        setLocationRelativeTo(null);
-        setModal(true);
-    }
-
-    private boolean validateFields() {
-        if (fechaPrestamoField.getText().isEmpty() || fechaDevolucionField.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios", "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-        return true;
+        add(cancelButton);
     }
 
     public Prestamo getPrestamo() {

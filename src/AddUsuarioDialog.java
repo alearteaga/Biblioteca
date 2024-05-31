@@ -2,32 +2,24 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Date;
 
 public class AddUsuarioDialog extends JDialog {
-    private JTextField nombreField;
-    private JTextField emailField;
-    private JTextField telefonoField;
-    private JButton okButton;
-    private JButton cancelButton;
+    private JTextField nombreField, apellidosField, emailField, telefonoField, rolField;
     private Usuario usuario;
 
     public AddUsuarioDialog() {
         setTitle("Añadir Usuario");
-        initUI();
-    }
-
-    public AddUsuarioDialog(Usuario usuario) {
-        setTitle("Editar Usuario");
-        initUI();
-        setFields(usuario);
-    }
-
-    private void initUI() {
-        setLayout(new GridLayout(4, 2));
+        setSize(400, 300);
+        setLayout(new GridLayout(6, 2));
 
         add(new JLabel("Nombre:"));
         nombreField = new JTextField();
         add(nombreField);
+
+        add(new JLabel("Apellidos:"));
+        apellidosField = new JTextField();
+        add(apellidosField);
 
         add(new JLabel("Email:"));
         emailField = new JTextField();
@@ -37,25 +29,29 @@ public class AddUsuarioDialog extends JDialog {
         telefonoField = new JTextField();
         add(telefonoField);
 
-        okButton = new JButton("OK");
-        cancelButton = new JButton("Cancel");
+        add(new JLabel("Rol:"));
+        rolField = new JTextField();
+        add(rolField);
 
-        add(okButton);
-        add(cancelButton);
-
-        okButton.addActionListener(new ActionListener() {
+        JButton addButton = new JButton("Añadir");
+        addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (validateFields()) {
-                    usuario = new Usuario();
-                    usuario.setNombre(nombreField.getText());
-                    usuario.setEmail(emailField.getText());
-                    usuario.setTelefono(telefonoField.getText());
-                    dispose();
-                }
+                usuario = new Usuario(
+                        0, // ID will be assigned by the database
+                        nombreField.getText(),
+                        apellidosField.getText(),
+                        emailField.getText(),
+                        telefonoField.getText(),
+                        rolField.getText(),
+                        new Date() // Fecha de Registro will be the current date
+                );
+                dispose();
             }
         });
+        add(addButton);
 
+        JButton cancelButton = new JButton("Cancelar");
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -63,24 +59,7 @@ public class AddUsuarioDialog extends JDialog {
                 dispose();
             }
         });
-
-        pack();
-        setLocationRelativeTo(null);
-        setModal(true);
-    }
-
-    private boolean validateFields() {
-        if (nombreField.getText().isEmpty() || emailField.getText().isEmpty() || telefonoField.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios", "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-        return true;
-    }
-
-    private void setFields(Usuario usuario) {
-        nombreField.setText(usuario.getNombre());
-        emailField.setText(usuario.getEmail());
-        telefonoField.setText(usuario.getTelefono());
+        add(cancelButton);
     }
 
     public Usuario getUsuario() {

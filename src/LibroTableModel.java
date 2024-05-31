@@ -2,7 +2,7 @@ import javax.swing.table.AbstractTableModel;
 import java.util.List;
 
 public class LibroTableModel extends AbstractTableModel {
-    private final List<Libro> libros;
+    private List<Libro> libros;
     private final String[] columnNames = {"ID", "Título", "Autor", "ISBN", "Editorial", "Año de Publicación", "Categoría", "Estado"};
 
     public LibroTableModel(List<Libro> libros) {

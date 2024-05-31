@@ -2,7 +2,7 @@ import javax.swing.table.AbstractTableModel;
 import java.util.List;
 
 public class PrestamoTableModel extends AbstractTableModel {
-    private final List<Prestamo> prestamos;
+    private List<Prestamo> prestamos;
     private final String[] columnNames = {"ID", "Usuario", "Libro", "Fecha de Préstamo", "Fecha de Devolución", "Fecha de Devolución Real"};
 
     public PrestamoTableModel(List<Prestamo> prestamos) {
@@ -32,9 +32,9 @@ public class PrestamoTableModel extends AbstractTableModel {
             case 3:
                 return prestamo.getFechaPrestamo();
             case 4:
-                return prestamo.getFechaDevolucion();
+                return prestamo.getFechaRetornoPrevista();
             case 5:
-                return prestamo.getFechaDevolucionReal();
+                return prestamo.getFechaRetornoReal();
             default:
                 return null;
         }

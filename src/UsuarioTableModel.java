@@ -1,17 +1,17 @@
 import javax.swing.table.AbstractTableModel;
 import java.util.List;
 
-public class UsuarioTableModel extends AbstractTableModel {
-    private final List<Usuario> usuarios;
-    private final String[] columnNames = {"ID", "Nombre", "Email", "Teléfono"};
+public class PrestamoTableModel extends AbstractTableModel {
+    private List<Prestamo> prestamos;
+    private final String[] columnNames = {"ID", "Usuario", "Libro", "Fecha de Préstamo", "Fecha de Devolución", "Fecha de Devolución Real"};
 
-    public UsuarioTableModel(List<Usuario> usuarios) {
-        this.usuarios = usuarios;
+    public PrestamoTableModel(List<Prestamo> prestamos) {
+        this.prestamos = prestamos;
     }
 
     @Override
     public int getRowCount() {
-        return usuarios.size();
+        return prestamos.size();
     }
 
     @Override
@@ -21,16 +21,20 @@ public class UsuarioTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        Usuario usuario = usuarios.get(rowIndex);
+        Prestamo prestamo = prestamos.get(rowIndex);
         switch (columnIndex) {
             case 0:
-                return usuario.getId();
+                return prestamo.getId();
             case 1:
-                return usuario.getNombre();
+                return prestamo.getUsuarioId();
             case 2:
-                return usuario.getEmail();
+                return prestamo.getLibroId();
             case 3:
-                return usuario.getTelefono();
+                return prestamo.getFechaPrestamo();
+            case 4:
+                return prestamo.getFechaRetornoPrevista();
+            case 5:
+                return prestamo.getFechaRetornoReal();
             default:
                 return null;
         }
@@ -41,12 +45,12 @@ public class UsuarioTableModel extends AbstractTableModel {
         return columnNames[column];
     }
 
-    public List<Usuario> getUsuarios() {
-        return usuarios;
+    public List<Prestamo> getPrestamos() {
+        return prestamos;
     }
 
-    public void setUsuarios(List<Usuario> usuarios) {
-        this.usuarios = usuarios;
+    public void setPrestamos(List<Prestamo> prestamos) {
+        this.prestamos = prestamos;
         fireTableDataChanged();
     }
 }
