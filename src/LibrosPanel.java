@@ -1,13 +1,17 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.SQLException;
-import java.util.List;
 
 public class LibrosPanel extends JPanel {
-    private LibroDAO libroDAO;
-    private JTextField tituloField, autorField, isbnField, editorialField, anyPublicacionField, categoriaField, estadoField;
+    private final LibroDAO libroDAO;
+    private final JTextField tituloField;
+    private final JTextField autorField;
+    private final JTextField isbnField;
+    private final JTextField editorialField;
+    private final JTextField anyPublicacionField;
+    private final JTextField categoriaField;
+    private final JTextField estadoField;
 
     public LibrosPanel(LibroDAO libroDAO) {
         this.libroDAO = libroDAO;
@@ -39,11 +43,8 @@ public class LibrosPanel extends JPanel {
 
         // Botón de agregar libro
         JButton agregarButton = new JButton("Agregar Libro");
-        agregarButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                agregarLibro();
-            }
+        agregarButton.addActionListener((ActionEvent e) -> {
+            agregarLibro();
         });
         formularioPanel.add(agregarButton);
 
@@ -69,7 +70,6 @@ public class LibrosPanel extends JPanel {
             libroDAO.agregarLibro(libro);
             JOptionPane.showMessageDialog(this, "Libro agregado exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
         } catch (SQLException e) {
-            e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error al agregar el libro", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }

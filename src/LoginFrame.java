@@ -1,14 +1,13 @@
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.SQLException;
+import javax.swing.*;
 
 public class LoginFrame extends JFrame {
-    private JTextField emailField;
-    private JPasswordField passwordField;
-    private UsuarioDAO usuarioDAO;
+    private final JTextField emailField;
+    private final JPasswordField passwordField;
+    private final UsuarioDAO usuarioDAO;
 
     public LoginFrame(Connection conexion) {
         // Configuración de la ventana de inicio de sesión
@@ -30,11 +29,8 @@ public class LoginFrame extends JFrame {
 
         // Botón de inicio de sesión
         JButton loginButton = new JButton("Iniciar Sesión");
-        loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                iniciarSesion();
-            }
+        loginButton.addActionListener((ActionEvent e) -> {
+            iniciarSesion();
         });
         loginPanel.add(loginButton);
 
@@ -50,12 +46,11 @@ public class LoginFrame extends JFrame {
             if (usuario != null) {
                 JOptionPane.showMessageDialog(this, "Inicio de sesión exitoso", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                 dispose(); // Cerrar la ventana de inicio de sesión
-                new BibliotecaGUI(); // Abrir la ventana principal de la biblioteca
+                new BibliotecaGUI(null); // Abrir la ventana principal de la biblioteca
             } else {
                 JOptionPane.showMessageDialog(this, "Email o contraseña incorrectos", "Error", JOptionPane.ERROR_MESSAGE);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error al iniciar sesión", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }

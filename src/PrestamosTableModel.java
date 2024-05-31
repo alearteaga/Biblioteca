@@ -1,6 +1,6 @@
-import javax.swing.table.AbstractTableModel;
 import java.sql.SQLException;
 import java.util.List;
+import javax.swing.table.AbstractTableModel;
 
 public class PrestamosTableModel extends AbstractTableModel {
     private List<Prestamo> prestamos;
@@ -10,7 +10,6 @@ public class PrestamosTableModel extends AbstractTableModel {
         try {
             prestamos = prestamoDAO.obtenerTodos();
         } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
 

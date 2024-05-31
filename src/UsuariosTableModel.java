@@ -1,6 +1,6 @@
-import javax.swing.table.AbstractTableModel;
 import java.sql.SQLException;
 import java.util.List;
+import javax.swing.table.AbstractTableModel;
 
 public class UsuariosTableModel extends AbstractTableModel {
     private List<Usuario> usuarios;
@@ -8,9 +8,8 @@ public class UsuariosTableModel extends AbstractTableModel {
 
     public UsuariosTableModel(UsuarioDAO usuarioDAO) {
         try {
-            usuarios = usuarioDAO.obtenerTodos();
+            usuarios = (List<Usuario>) usuarioDAO.obtenerTodos();
         } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
 

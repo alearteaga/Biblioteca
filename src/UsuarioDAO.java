@@ -2,9 +2,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 public class UsuarioDAO {
-    private Connection conexion;
+    private final Connection conexion;
 
     public UsuarioDAO(Connection conexion) {
         this.conexion = conexion;
@@ -46,6 +47,7 @@ public class UsuarioDAO {
     }
     
     public List<Usuario> obtenerTodos() throws SQLException {
+        return null;
         // Método para obtener todos los usuarios
     }
 }

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LibroDAO {
-    private Connection conexion;
+    private final Connection conexion;
 
     public LibroDAO(Connection conexion) {
         this.conexion = conexion;

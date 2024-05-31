@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PrestamoDAO {
-    private Connection conexion;
+    private final Connection conexion;
 
     public PrestamoDAO(Connection conexion) {
         this.conexion = conexion;

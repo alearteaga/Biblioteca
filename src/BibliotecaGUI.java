@@ -1,16 +1,14 @@
-import javax.swing.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import javax.swing.*;
 
 public class BibliotecaGUI extends JFrame {
-    private Connection conexion;
-    private LibroDAO libroDAO;
-    private UsuarioDAO usuarioDAO;
-    private PrestamoDAO prestamoDAO;
+    private final LibroDAO libroDAO;
+    private final UsuarioDAO usuarioDAO;
+    private final PrestamoDAO prestamoDAO;
 
     public BibliotecaGUI(Connection conexion) {
-        this.conexion = conexion;
         libroDAO = new LibroDAO(conexion);
         usuarioDAO = new UsuarioDAO(conexion);
         prestamoDAO = new PrestamoDAO(conexion);
@@ -36,10 +34,9 @@ public class BibliotecaGUI extends JFrame {
 
     public static void main(String[] args) {
         try {
-            Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/biblioteca", "root", "My7Pass@Word_9_8A_zE");
+            Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/biblioteca", "usuario", "contraseña");
             SwingUtilities.invokeLater(() -> new LoginFrame(conexion).setVisible(true));
         } catch (SQLException e) {
-            e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Error al conectar a la base de datos", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }

@@ -1,12 +1,16 @@
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import javax.swing.*;
 
 public class PrestamosPanel extends JPanel {
-    private PrestamoDAO prestamoDAO;
-    private JTextField idLibroField, idUsuarioField, fechaPrestamoField, fechaRetornoPrevistaField, fechaRetornoRealField, estadoField;
+    private final PrestamoDAO prestamoDAO;
+    private final JTextField idLibroField;
+    private final JTextField idUsuarioField;
+    private final JTextField fechaPrestamoField;
+    private final JTextField fechaRetornoPrevistaField;
+    private final JTextField fechaRetornoRealField;
+    private final JTextField estadoField;
 
     public PrestamosPanel(PrestamoDAO prestamoDAO) {
         this.prestamoDAO = prestamoDAO;
@@ -35,11 +39,8 @@ public class PrestamosPanel extends JPanel {
 
         // Botón de agregar préstamo
         JButton agregarButton = new JButton("Agregar Préstamo");
-        agregarButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                agregarPrestamo();
-            }
+        agregarButton.addActionListener((ActionEvent e) -> {
+            agregarPrestamo();
         });
         formularioPanel.add(agregarButton);
 
@@ -64,7 +65,6 @@ public class PrestamosPanel extends JPanel {
             prestamoDAO.agregarPrestamo(prestamo);
             JOptionPane.showMessageDialog(this, "Préstamo agregado exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
         } catch (SQLException e) {
-            e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error al agregar el préstamo", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }

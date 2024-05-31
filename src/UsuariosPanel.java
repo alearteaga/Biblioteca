@@ -1,12 +1,16 @@
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import javax.swing.*;
 
 public class UsuariosPanel extends JPanel {
-    private UsuarioDAO usuarioDAO;
-    private JTextField nombreField, apellidosField, emailField, telefonoField, rolField, fechaRegistroField;
+    private final UsuarioDAO usuarioDAO;
+    private final JTextField nombreField;
+    private final JTextField apellidosField;
+    private final JTextField emailField;
+    private final JTextField telefonoField;
+    private final JTextField rolField;
+    private final JTextField fechaRegistroField;
 
     public UsuariosPanel(UsuarioDAO usuarioDAO) {
         this.usuarioDAO = usuarioDAO;
@@ -35,11 +39,8 @@ public class UsuariosPanel extends JPanel {
 
         // Botón de agregar usuario
         JButton agregarButton = new JButton("Agregar Usuario");
-        agregarButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                agregarUsuario();
-            }
+        agregarButton.addActionListener((ActionEvent e) -> {
+            agregarUsuario();
         });
         formularioPanel.add(agregarButton);
 
@@ -64,7 +65,6 @@ public class UsuariosPanel extends JPanel {
             usuarioDAO.agregarUsuario(usuario);
             JOptionPane.showMessageDialog(this, "Usuario agregado exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
         } catch (SQLException e) {
-            e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error al agregar el usuario", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
