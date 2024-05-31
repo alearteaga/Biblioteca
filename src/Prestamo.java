@@ -46,4 +46,32 @@ public class Prestamo {
     public String getEstado() {
         return estado;
     }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setUsuarioId(int usuarioId) {
+        this.usuarioId = usuarioId;
+    }
+
+    public void setLibroId(int libroId) {
+        this.libroId = libroId;
+    }
+
+    public void setFechaPrestamo(Date fechaPrestamo) {
+        this.fechaPrestamo = fechaPrestamo;
+    }
+
+    public void setFechaRetornoPrevista(Date fechaRetornoPrevista) {
+        this.fechaRetornoPrevista = fechaRetornoPrevista;
+    }
+
+    public void setFechaRetornoReal(Date fechaRetornoReal) {
+        this.fechaRetornoReal = fechaRetornoReal;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
 }
