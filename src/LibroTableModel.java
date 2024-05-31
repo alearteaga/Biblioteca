@@ -3,7 +3,7 @@ import java.util.List;
 
 public class LibroTableModel extends AbstractTableModel {
     private final List<Libro> libros;
-    private final String[] columnNames = {"ID", "Título", "Autor", "ISBN", "Editorial", "Año Publicación", "Categoría", "Estado"};
+    private final String[] columnNames = {"ID", "Título", "Autor", "ISBN", "Editorial", "Año de Publicación", "Categoría", "Estado"};
 
     public LibroTableModel(List<Libro> libros) {
         this.libros = libros;
@@ -23,20 +23,38 @@ public class LibroTableModel extends AbstractTableModel {
     public Object getValueAt(int rowIndex, int columnIndex) {
         Libro libro = libros.get(rowIndex);
         switch (columnIndex) {
-            case 0: return libro.getId();
-            case 1: return libro.getTitulo();
-            case 2: return libro.getAutor();
-            case 3: return libro.getIsbn();
-            case 4: return libro.getEditorial();
-            case 5: return libro.getAnoPublicacion();
-            case 6: return libro.getCategoria();
-            case 7: return libro.getEstado();
-            default: return null;
+            case 0:
+                return libro.getId();
+            case 1:
+                return libro.getTitulo();
+            case 2:
+                return libro.getAutor();
+            case 3:
+                return libro.getIsbn();
+            case 4:
+                return libro.getEditorial();
+            case 5:
+                return libro.getAnoPublicacion();
+            case 6:
+                return libro.getCategoria();
+            case 7:
+                return libro.getEstado();
+            default:
+                return null;
         }
     }
 
     @Override
     public String getColumnName(int column) {
         return columnNames[column];
+    }
+
+    public List<Libro> getLibros() {
+        return libros;
+    }
+
+    public void setLibros(List<Libro> libros) {
+        this.libros = libros;
+        fireTableDataChanged();
     }
 }
