@@ -11,7 +11,7 @@ public class Main {
     public static void main(String[] args) {
         Connection connection = null;
         try {
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/biblioteca", "usuario", "contraseña");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/biblioteca", "root", "My7Pass@Word_9_8A_zE");
         } catch (SQLException e) {
             e.printStackTrace();
             return;
