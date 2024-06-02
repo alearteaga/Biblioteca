@@ -42,4 +42,10 @@ public class PrestamoDAO {
     }
 
     public void eliminarPrestamo(int idPrestamo) throws SQLException {
-        String query = "DELETE FROM prest
+        String query = "DELETE FROM prestamos WHERE id_prestamo = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, idPrestamo);
+            statement.executeUpdate();
+        }
+    }
+}
