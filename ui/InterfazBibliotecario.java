@@ -2,38 +2,77 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class InterfazLector extends JFrame {
-    private JButton btnBuscarLibros, btnConsultarHistorial;
+public class InterfazBibliotecario extends JFrame {
+    private JButton btnAgregarLibro, btnModificarLibro, btnEliminarLibro;
+    private JButton btnVerPrestamosActivos, btnVerHistorialPrestamos;
+    private JButton btnGestionarMultas;
     private Connection connection;
 
-    public InterfazLector(Connection connection) {
+    public InterfazBibliotecario(Connection connection) {
         this.connection = connection;
-        setTitle("Interfaz de Lector");
-        setSize(400, 200);
+        setTitle("Interfaz de Bibliotecario");
+        setSize(400, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
-        btnBuscarLibros = new JButton("Buscar Libros Disponibles");
-        btnConsultarHistorial = new JButton("Consultar Historial de Préstamos");
+        btnAgregarLibro = new JButton("Agregar Libro");
+        btnModificarLibro = new JButton("Modificar Libro");
+        btnEliminarLibro = new JButton("Eliminar Libro");
+        btnVerPrestamosActivos = new JButton("Ver Préstamos Activos");
+        btnVerHistorialPrestamos = new JButton("Ver Historial de Préstamos");
+        btnGestionarMultas = new JButton("Gestionar Multas");
 
-        panel.add(btnBuscarLibros);
-        panel.add(btnConsultarHistorial);
+        panel.add(btnAgregarLibro);
+        panel.add(btnModificarLibro);
+        panel.add(btnEliminarLibro);
+        panel.add(btnVerPrestamosActivos);
+        panel.add(btnVerHistorialPrestamos);
+        panel.add(btnGestionarMultas);
 
-        btnBuscarLibros.addActionListener(new ActionListener() {
+        btnAgregarLibro.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // Abre una nueva ventana para buscar libros disponibles
-                new VentanaBuscarLibros(connection);
+                // Abre una nueva ventana para agregar un libro
+                new VentanaAgregarLibro(connection);
             }
         });
 
-        btnConsultarHistorial.addActionListener(new ActionListener() {
+        btnModificarLibro.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // Abre una nueva ventana para consultar historial de préstamos
+                // Abre una nueva ventana para modificar un libro
+                new VentanaModificarLibro(connection);
+            }
+        });
+
+        btnEliminarLibro.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Abre una nueva ventana para eliminar un libro
+                new VentanaEliminarLibro(connection);
+            }
+        });
+
+        btnVerPrestamosActivos.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Abre una nueva ventana para ver préstamos activos
+                new VentanaPrestamosActivos(connection);
+            }
+        });
+
+        btnVerHistorialPrestamos.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Abre una nueva ventana para ver historial de préstamos
                 new VentanaHistorialPrestamos(connection);
+            }
+        });
+
+        btnGestionarMultas.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Abre una nueva ventana para gestionar multas
+                new VentanaGestionarMultas(connection);
             }
         });
 
@@ -42,12 +81,13 @@ public class InterfazLector extends JFrame {
     }
 
     public static void main(String[] args) {
-        // Se requiere una conexión a la base de datos aquí
         Connection connection = null;
         try {
-            // Establecer conexión a la base de datos
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/biblioteca", "usuario", "contraseña");
-            new InterfazLector(connection);
+            InterfazBibliotecario interfazBibliotecario = new InterfazBibliotecario(connection);
+            InterfazLector interfazLector = new InterfazLector(connection);
+            interfazBibliotecario.setVisible(true);
+            interfazLector.setVisible(true);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
