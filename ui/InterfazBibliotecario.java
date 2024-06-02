@@ -2,8 +2,8 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.List;
 
 public class InterfazBibliotecario extends JFrame {
     private JButton btnAgregarLibro, btnModificarLibro, btnEliminarLibro;
@@ -36,43 +36,63 @@ public class InterfazBibliotecario extends JFrame {
 
         btnAgregarLibro.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // Abre una nueva ventana para agregar un libro
-                new VentanaAgregarLibro(connection);
+                try {
+                    new VentanaAgregarLibro(connection).setVisible(true);
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
             }
         });
 
         btnModificarLibro.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // Abre una nueva ventana para modificar un libro
-                new VentanaModificarLibro(connection);
+                try {
+                    new VentanaModificarLibro(connection).setVisible(true);
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
             }
         });
 
         btnEliminarLibro.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // Abre una nueva ventana para eliminar un libro
-                new VentanaEliminarLibro(connection);
+                try {
+                    new VentanaEliminarLibro(connection).setVisible(true);
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
             }
         });
 
         btnVerPrestamosActivos.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // Abre una nueva ventana para ver préstamos activos
-                new VentanaPrestamosActivos(connection);
+                try {
+                    List<Prestamo> prestamos = PrestamoDAO.getPrestamosActivos(connection);
+                    mostrarPrestamos(prestamos);
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
             }
         });
 
         btnVerHistorialPrestamos.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // Abre una nueva ventana para ver historial de préstamos
-                new VentanaHistorialPrestamos(connection);
+                try {
+                    List<Prestamo> prestamos = PrestamoDAO.getHistorialPrestamos(connection);
+                    mostrarPrestamos(prestamos);
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
             }
         });
 
         btnGestionarMultas.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // Abre una nueva ventana para gestionar multas
-                new VentanaGestionarMultas(connection);
+                try {
+                    new VentanaGestionarMultas(connection).setVisible(true);
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
             }
         });
 
@@ -80,24 +100,12 @@ public class InterfazBibliotecario extends JFrame {
         setVisible(true);
     }
 
-    public static void main(String[] args) {
-        Connection connection = null;
-        try {
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/biblioteca", "usuario", "contraseña");
-            InterfazBibliotecario interfazBibliotecario = new InterfazBibliotecario(connection);
-            InterfazLector interfazLector = new InterfazLector(connection);
-            interfazBibliotecario.setVisible(true);
-            interfazLector.setVisible(true);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+    private void mostrarPrestamos(List<Prestamo> prestamos) {
+        StringBuilder sb = new StringBuilder();
+        for (Prestamo prestamo : prestamos) {
+            sb.append(prestamo).append("\n");
         }
+        JTextArea textArea = new JTextArea(sb.toString());
+        JOptionPane.showMessageDialog(null, new JScrollPane(textArea), "Prestamos", JOptionPane.PLAIN_MESSAGE);
     }
 }

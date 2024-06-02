@@ -3,6 +3,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 
 public class InterfazLector extends JFrame {
     private JButton btnBuscarLibros, btnConsultarHistorial;
@@ -25,19 +26,46 @@ public class InterfazLector extends JFrame {
 
         btnBuscarLibros.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // Abre una nueva ventana para buscar libros disponibles
-                new VentanaBuscarLibros(connection);
+                try {
+                    List<Libro> libros = LibroDAO.obtenerLibrosDisponibles(connection);
+                    mostrarLibros(libros);
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
             }
         });
 
         btnConsultarHistorial.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // Abre una nueva ventana para consultar historial de préstamos
-                new VentanaHistorialPrestamos(connection);
+                try {
+                    int idUsuario = Integer.parseInt(JOptionPane.showInputDialog("Ingrese su ID de usuario:"));
+                    List<Prestamo> historial = PrestamoDAO.getHistorialPrestamosUsuario(connection, idUsuario);
+                    mostrarHistorial(historial);
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
             }
         });
 
         add(panel);
         setVisible(true);
+    }
+
+    private void mostrarLibros(List<Libro> libros) {
+        StringBuilder sb = new StringBuilder();
+        for (Libro libro : libros) {
+            sb.append(libro).append("\n");
+        }
+        JTextArea textArea = new JTextArea(sb.toString());
+        JOptionPane.showMessageDialog(null, new JScrollPane(textArea), "Libros Disponibles", JOptionPane.PLAIN_MESSAGE);
+    }
+
+    private void mostrarHistorial(List<Prestamo> historial) {
+        StringBuilder sb = new StringBuilder();
+        for (Prestamo prestamo : historial) {
+            sb.append(prestamo).append("\n");
+        }
+        JTextArea textArea = new JTextArea(sb.toString());
+        JOptionPane.showMessageDialog(null, new JScrollPane(textArea), "Historial de Préstamos", JOptionPane.PLAIN_MESSAGE);
     }
 }
