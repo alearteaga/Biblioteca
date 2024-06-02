@@ -1,16 +1,17 @@
-package biblioteca;
+import java.util.Date;
 
 public class Usuario {
-    private int id;
-    private String numero;
+    private int idUsuario;
+    private int numero;
     private String apellidos;
     private String correoElectronico;
     private String telefono;
     private String rol;
-    private String fechaRegistro;
+    private Date fechaRegistro;
 
-    public Usuario(int id, String numero, String apellidos, String correoElectronico, String telefono, String rol, String fechaRegistro) {
-        this.id = id;
+    // Constructor
+    public Usuario(int idUsuario, int numero, String apellidos, String correoElectronico, String telefono, String rol, Date fechaRegistro) {
+        this.idUsuario = idUsuario;
         this.numero = numero;
         this.apellidos = apellidos;
         this.correoElectronico = correoElectronico;
@@ -19,19 +20,20 @@ public class Usuario {
         this.fechaRegistro = fechaRegistro;
     }
 
-    public int getId() {
-        return id;
+    // Getters y Setters
+    public int getIdUsuario() {
+        return idUsuario;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
-    public String getNumero() {
+    public int getNumero() {
         return numero;
     }
 
-    public void setNumero(String numero) {
+    public void setNumero(int numero) {
         this.numero = numero;
     }
 
@@ -67,11 +69,11 @@ public class Usuario {
         this.rol = rol;
     }
 
-    public String getFechaRegistro() {
+    public Date getFechaRegistro() {
         return fechaRegistro;
     }
 
-    public void setFechaRegistro(String fechaRegistro) {
+    public void setFechaRegistro(Date fechaRegistro) {
         this.fechaRegistro = fechaRegistro;
     }
 }

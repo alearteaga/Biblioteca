@@ -1,120 +1,72 @@
-package biblioteca;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class LibroDAO {
-    public static void insertLibro(Libro libro) throws SQLException {
-        Connection conn = null;
-        PreparedStatement stmt = null;
+    private Connection connection;
 
-        try {
-            conn = DatabaseConnection.getConnection();
-            String query = "INSERT INTO Libros (Titulo, Autor, ISBN, Editorial, Año_Publicacion, Categoria, Estado) VALUES (?, ?, ?, ?, ?, ?, ?)";
-            stmt = conn.prepareStatement(query);
-            stmt.setString(1, libro.getTitulo());
-            stmt.setString(2, libro.getAutor());
-            stmt.setString(3, libro.getIsbn());
-            stmt.setString(4, libro.getEditorial());
-            stmt.setInt(5, libro.getAñoPublicacion());
-            stmt.setString(6, libro.getCategoria());
-            stmt.setString(7, libro.getEstado());
-            stmt.executeUpdate();
-        } finally {
-            if (stmt != null) {
-                stmt.close();
-            }
-            if (conn != null) {
-                              conn.close();
-            }
+    public LibroDAO(Connection connection) {
+        this.connection = connection;
+    }
+
+    public void agregarLibro(Libro libro) throws SQLException {
+        String query = "INSERT INTO libros (id_libro, titulo, autor, isbn, editorial, año_publicacion, categoria, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, libro.getIdLibro());
+            statement.setString(2, libro.getTitulo());
+            statement.setString(3, libro.getAutor());
+            statement.setString(4, libro.getIsbn());
+            statement.setString(5, libro.getEditorial());
+            statement.setInt(6, libro.getAñoPublicacion());
+            statement.setString(7, libro.getCategoria());
+            statement.setString(8, libro.getEstado());
+            statement.executeUpdate();
         }
     }
 
-    public static void updateLibro(Libro libro) throws SQLException {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-
-        try {
-            conn = DatabaseConnection.getConnection();
-            String query = "UPDATE Libros SET Titulo=?, Autor=?, ISBN=?, Editorial=?, Año_Publicacion=?, Categoria=?, Estado=? WHERE ID_Libro=?";
-            stmt = conn.prepareStatement(query);
-            stmt.setString(1, libro.getTitulo());
-            stmt.setString(2, libro.getAutor());
-            stmt.setString(3, libro.getIsbn());
-            stmt.setString(4, libro.getEditorial());
-            stmt.setInt(5, libro.getAñoPublicacion());
-            stmt.setString(6, libro.getCategoria());
-            stmt.setString(7, libro.getEstado());
-            stmt.setInt(8, libro.getId());
-            stmt.executeUpdate();
-        } finally {
-            if (stmt != null) {
-                stmt.close();
-            }
-            if (conn != null) {
-                conn.close();
-            }
-        }
-    }
-
-    public static void deleteLibro(int id) throws SQLException {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-
-        try {
-            conn = DatabaseConnection.getConnection();
-            String query = "DELETE FROM Libros WHERE ID_Libro=?";
-            stmt = conn.prepareStatement(query);
-            stmt.setInt(1, id);
-            stmt.executeUpdate();
-        } finally {
-            if (stmt != null) {
-                stmt.close();
-            }
-            if (conn != null) {
-                conn.close();
-            }
-        }
-    }
-
-    public static List<Libro> getLibros() throws SQLException {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
+    public List<Libro> obtenerLibrosDisponibles() throws SQLException {
         List<Libro> libros = new ArrayList<>();
-
-        try {
-            conn = DatabaseConnection.getConnection();
-            String query = "SELECT * FROM Libros";
-            stmt = conn.prepareStatement(query);
-            rs = stmt.executeQuery();
-
-            while (rs.next()) {
-                int id = rs.getInt("ID_Libro");
-                String titulo = rs.getString("Titulo");
-                String autor = rs.getString("Autor");
-                String isbn = rs.getString("ISBN");
-                String editorial = rs.getString("Editorial");
-                int añoPublicacion = rs.getInt("Año_Publicacion");
-                String categoria = rs.getString("Categoria");
-                String estado = rs.getString("Estado");
-
-                Libro libro = new Libro(id, titulo, autor, isbn, editorial, añoPublicacion, categoria, estado);
-                libros.add(libro);
-            }
-        } finally {
-            if (rs != null) {
-                rs.close();
-            }
-            if (stmt != null) {
-                stmt.close();
-            }
-            if (conn != null) {
-                conn.close();
+        String query = "SELECT * FROM libros WHERE estado = 'disponible'";
+        try (PreparedStatement statement = connection.prepareStatement(query);
+             ResultSet resultSet = statement.executeQuery()) {
+            while (resultSet.next()) {
+                int idLibro = resultSet.getInt("id_libro");
+                String titulo = resultSet.getString("titulo");
+                String autor = resultSet.getString("autor");
+                String isbn = resultSet.getString("isbn");
+                String editorial = resultSet.getString("editorial");
+                int añoPublicacion = resultSet.getInt("año_publicacion");
+                String categoria = resultSet.getString("categoria");
+                String estado = resultSet.getString("estado");
+                libros.add(new Libro(idLibro, titulo, autor, isbn, editorial, añoPublicacion, categoria, estado));
             }
         }
-
         return libros;
+    }
+
+    public void modificarLibro(Libro libro) throws SQLException {
+        String query = "UPDATE libros SET titulo = ?, autor = ?, isbn = ?, editorial = ?, año_publicacion = ?, categoria = ?, estado = ? WHERE id_libro = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, libro.getTitulo());
+            statement.setString(2, libro.getAutor());
+            statement.setString(3, libro.getIsbn());
+            statement.setString(4, libro.getEditorial());
+            statement.setInt(5, libro.getAñoPublicacion());
+            statement.setString(6, libro.getCategoria());
+            statement.setString(7, libro.getEstado());
+            statement.setInt(8, libro.getIdLibro());
+            statement.executeUpdate();
+        }
+    }
+
+    public void eliminarLibro(int idLibro) throws SQLException {
+        String query = "DELETE FROM libros WHERE id_libro = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, idLibro);
+            statement.executeUpdate();
+        }
     }
 }

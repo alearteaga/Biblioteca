@@ -1,16 +1,17 @@
-package biblioteca;
+import java.util.Date;
 
 public class Prestamo {
-    private int id;
+    private int idPrestamo;
     private int idLibro;
     private int idUsuario;
-    private String fechaPrestamo;
-    private String fechaRetornoPrevista;
-    private String fechaRetornoReal;
+    private Date fechaPrestamo;
+    private Date fechaRetornoPrevista;
+    private Date fechaRetornoReal;
     private String estado;
 
-    public Prestamo(int id, int idLibro, int idUsuario, String fechaPrestamo, String fechaRetornoPrevista, String fechaRetornoReal, String estado) {
-        this.id = id;
+    // Constructor
+    public Prestamo(int idPrestamo, int idLibro, int idUsuario, Date fechaPrestamo, Date fechaRetornoPrevista, Date fechaRetornoReal, String estado) {
+        this.idPrestamo = idPrestamo;
         this.idLibro = idLibro;
         this.idUsuario = idUsuario;
         this.fechaPrestamo = fechaPrestamo;
@@ -19,12 +20,13 @@ public class Prestamo {
         this.estado = estado;
     }
 
-    public int getId() {
-        return id;
+    // Getters y Setters
+    public int getIdPrestamo() {
+        return idPrestamo;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setIdPrestamo(int idPrestamo) {
+        this.idPrestamo = idPrestamo;
     }
 
     public int getIdLibro() {
@@ -43,27 +45,27 @@ public class Prestamo {
         this.idUsuario = idUsuario;
     }
 
-    public String getFechaPrestamo() {
+    public Date getFechaPrestamo() {
         return fechaPrestamo;
     }
 
-    public void setFechaPrestamo(String fechaPrestamo) {
+    public void setFechaPrestamo(Date fechaPrestamo) {
         this.fechaPrestamo = fechaPrestamo;
     }
 
-    public String getFechaRetornoPrevista() {
+    public Date getFechaRetornoPrevista() {
         return fechaRetornoPrevista;
     }
 
-    public void setFechaRetornoPrevista(String fechaRetornoPrevista) {
+    public void setFechaRetornoPrevista(Date fechaRetornoPrevista) {
         this.fechaRetornoPrevista = fechaRetornoPrevista;
     }
 
-    public String getFechaRetornoReal() {
+    public Date getFechaRetornoReal() {
         return fechaRetornoReal;
     }
 
-    public void setFechaRetornoReal(String fechaRetornoReal) {
+    public void setFechaRetornoReal(Date fechaRetornoReal) {
         this.fechaRetornoReal = fechaRetornoReal;
     }
 

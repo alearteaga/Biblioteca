@@ -1,7 +1,5 @@
-package biblioteca;
-
 public class Libro {
-    private int id;
+    private int idLibro;
     private String titulo;
     private String autor;
     private String isbn;
@@ -10,8 +8,9 @@ public class Libro {
     private String categoria;
     private String estado;
 
-    public Libro(int id, String titulo, String autor, String isbn, String editorial, int añoPublicacion, String categoria, String estado) {
-        this.id = id;
+    // Constructor
+    public Libro(int idLibro, String titulo, String autor, String isbn, String editorial, int añoPublicacion, String categoria, String estado) {
+        this.idLibro = idLibro;
         this.titulo = titulo;
         this.autor = autor;
         this.isbn = isbn;
@@ -21,12 +20,13 @@ public class Libro {
         this.estado = estado;
     }
 
-    public int getId() {
-        return id;
+    // Getters y Setters
+    public int getIdLibro() {
+        return idLibro;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setIdLibro(int idLibro) {
+        this.idLibro = idLibro;
     }
 
     public String getTitulo() {
