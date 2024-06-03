@@ -4,7 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PrestamoDAO {
     private Connection connection;
@@ -53,6 +54,27 @@ public class PrestamoDAO {
         }
     }
 
+    public List<Prestamo> obtenerTodosLosPrestamos() throws SQLException {
+        List<Prestamo> prestamos = new ArrayList<>();
+        String query = "SELECT * FROM prestamos";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    prestamos.add(new Prestamo(
+                            resultSet.getInt("id_prestamo"),
+                            resultSet.getInt("id_libro"),
+                            resultSet.getInt("id_usuario"),
+                            resultSet.getDate("fecha_prestamo"),
+                            resultSet.getDate("fecha_retorno_prevista"),
+                            resultSet.getDate("fecha_retorno_real"),
+                            resultSet.getString("estado")
+                    ));
+                }
+            }
+        }
+        return prestamos;
+    }
+
     public Prestamo obtenerPrestamoPorId(int idPrestamo) throws SQLException {
         String query = "SELECT * FROM prestamos WHERE id_prestamo = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -61,9 +83,9 @@ public class PrestamoDAO {
                 if (resultSet.next()) {
                     int idLibro = resultSet.getInt("id_libro");
                     int idUsuario = resultSet.getInt("id_usuario");
-                    Date fechaPrestamo = resultSet.getDate("fecha_prestamo");
-                    Date fechaRetornoPrevista = resultSet.getDate("fecha_retorno_prevista");
-                    Date fechaRetornoReal = resultSet.getDate("fecha_retorno_real");
+                    java.util.Date fechaPrestamo = resultSet.getDate("fecha_prestamo");
+                    java.util.Date fechaRetornoPrevista = resultSet.getDate("fecha_retorno_prevista");
+                    java.util.Date fechaRetornoReal = resultSet.getDate("fecha_retorno_real");
                     String estado = resultSet.getString("estado");
                     return new Prestamo(idPrestamo, idLibro, idUsuario, fechaPrestamo, fechaRetornoPrevista, fechaRetornoReal, estado);
                 } else {
