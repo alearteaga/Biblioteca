@@ -1,16 +1,34 @@
 package biblioteca;
 
+import javax.swing.*;
+import java.awt.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 
 public class Main {
     public static void main(String[] args) {
+        // Crear la conexión a la base de datos
+        Connection connection = null;
         try {
-            Connection connection = ConexionBD.getConnection();
-            InterfazBibliotecario interfazBibliotecario = new InterfazBibliotecario(connection);
-            interfazBibliotecario.mostrarMenu();
+            connection = ConexionBD.getConnection();
         } catch (SQLException e) {
-            System.err.println("Error al conectar con la base de datos: " + e.getMessage());
+            e.printStackTrace();
+            // Manejar cualquier error al conectar
+            return;
         }
+
+        // Crear la interfaz del bibliotecario
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                new InterfazBibliotecario(connection);
+            }
+        });
+
+        // Crear la interfaz del lector
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                new InterfazLector(connection);
+            }
+        });
     }
 }

@@ -1,198 +1,109 @@
 package biblioteca;
 
-
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.SQLException;
-import java.util.Scanner;
 
-public class InterfazBibliotecario {
+public class InterfazBibliotecario extends JFrame {
     private LibroDAO libroDAO;
     private PrestamoDAO prestamoDAO;
     private UsuarioDAO usuarioDAO;
-    private Scanner scanner;
+    private JTextField txtIdLibro;
+    private JTextField txtTitulo;
+    private JTextField txtAutor;
+    private JTextField txtIsbn;
+    private JTextField txtEditorial;
+    private JTextField txtAnioPublicacion;
+    private JTextField txtCategoria;
+    private JTextField txtEstado;
 
     public InterfazBibliotecario(Connection connection) {
         this.libroDAO = new LibroDAO(connection);
         this.prestamoDAO = new PrestamoDAO(connection);
         this.usuarioDAO = new UsuarioDAO(connection);
-        this.scanner = new Scanner(System.in);
-    }
 
-    public void mostrarMenu() {
-        int opcion = -1;
-        while (opcion != 0) {
-            System.out.println("Menú del Bibliotecario:");
-            System.out.println("1. Agregar libro");
-            System.out.println("2. Modificar libro");
-            System.out.println("3. Eliminar libro");
-            System.out.println("4. Registrar usuario");
-            System.out.println("5. Modificar usuario");
-            System.out.println("6. Eliminar usuario");
-            System.out.println("0. Salir");
-            System.out.print("Seleccione una opción: ");
-            opcion = scanner.nextInt();
-            scanner.nextLine();  // Consumir nueva línea
+        setTitle("Interfaz del Bibliotecario");
+        setSize(500, 400);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-            switch (opcion) {
-                case 1:
-                    agregarLibro();
-                    break;
-                case 2:
-                    modificarLibro();
-                    break;
-                case 3:
-                    eliminarLibro();
-                    break;
-                case 4:
-                    registrarUsuario();
-                    break;
-                case 5:
-                    modificarUsuario();
-                    break;
-                case 6:
-                    eliminarUsuario();
-                    break;
-                case 0:
-                    System.out.println("Saliendo...");
-                    break;
-                default:
-                    System.out.println("Opción inválida. Intente de nuevo.");
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(9, 2));
+
+        panel.add(new JLabel("ID del Libro:"));
+        txtIdLibro = new JTextField();
+        panel.add(txtIdLibro);
+
+        panel.add(new JLabel("Título:"));
+        txtTitulo = new JTextField();
+        panel.add(txtTitulo);
+
+        panel.add(new JLabel("Autor:"));
+        txtAutor = new JTextField();
+        panel.add(txtAutor);
+
+        panel.add(new JLabel("ISBN:"));
+        txtIsbn = new JTextField();
+        panel.add(txtIsbn);
+
+        panel.add(new JLabel("Editorial:"));
+        txtEditorial = new JTextField();
+        panel.add(txtEditorial);
+
+        panel.add(new JLabel("Año de Publicación:"));
+        txtAnioPublicacion = new JTextField();
+        panel.add(txtAnioPublicacion);
+
+        panel.add(new JLabel("Categoría:"));
+        txtCategoria = new JTextField();
+        panel.add(txtCategoria);
+
+        panel.add(new JLabel("Estado:"));
+        txtEstado = new JTextField();
+        panel.add(txtEstado);
+
+        JButton btnAgregarLibro = new JButton("Agregar Libro");
+        btnAgregarLibro.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                agregarLibro();
             }
-        }
+        });
+        panel.add(btnAgregarLibro);
+
+        add(panel);
+        setVisible(true);
     }
 
     private void agregarLibro() {
-        System.out.print("Ingrese el ID del libro: ");
-        int idLibro = scanner.nextInt();
-        scanner.nextLine();
-        System.out.print("Ingrese el título del libro: ");
-        String titulo = scanner.nextLine();
-        System.out.print("Ingrese el autor del libro: ");
-        String autor = scanner.nextLine();
-        System.out.print("Ingrese el ISBN del libro: ");
-        String isbn = scanner.nextLine();
-        System.out.print("Ingrese la editorial del libro: ");
-        String editorial = scanner.nextLine();
-        System.out.print("Ingrese el año de publicación del libro: ");
-        int añoPublicacion = scanner.nextInt();
-        scanner.nextLine();
-        System.out.print("Ingrese la categoría del libro: ");
-        String categoria = scanner.nextLine();
-        System.out.print("Ingrese el estado del libro: ");
-        String estado = scanner.nextLine();
+        int idLibro = Integer.parseInt(txtIdLibro.getText());
+        String titulo = txtTitulo.getText();
+        String autor = txtAutor.getText();
+        String isbn = txtIsbn.getText();
+        String editorial = txtEditorial.getText();
+        int añoPublicacion = Integer.parseInt(txtAnioPublicacion.getText());
+        String categoria = txtCategoria.getText();
+        String estado = txtEstado.getText();
 
         Libro libro = new Libro(idLibro, titulo, autor, isbn, editorial, añoPublicacion, categoria, estado);
         try {
             libroDAO.agregarLibro(libro);
-            System.out.println("Libro agregado exitosamente.");
-        } catch (SQLException e) {
-            System.err.println("Error al agregar el libro: " + e.getMessage());
+            JOptionPane.showMessageDialog(this, "Libro agregado exitosamente.");
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Error al agregar el libro: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    private void modificarLibro() {
-        System.out.print("Ingrese el ID del libro a modificar: ");
-        int idLibro = scanner.nextInt();
-        scanner.nextLine();
-        System.out.print("Ingrese el nuevo título del libro: ");
-        String titulo = scanner.nextLine();
-        System.out.print("Ingrese el nuevo autor del libro: ");
-        String autor = scanner.nextLine();
-        System.out.print("Ingrese el nuevo ISBN del libro: ");
-        String isbn = scanner.nextLine();
-        System.out.print("Ingrese la nueva editorial del libro: ");
-        String editorial = scanner.nextLine();
-        System.out.print("Ingrese el nuevo año de publicación del libro: ");
-        int añoPublicacion = scanner.nextInt();
-        scanner.nextLine();
-        System.out.print("Ingrese la nueva categoría del libro: ");
-        String categoria = scanner.nextLine();
-        System.out.print("Ingrese el nuevo estado del libro: ");
-        String estado = scanner.nextLine();
+    public static void main(String[] args) {
+        // Aquí deberías crear la conexión a la base de datos
+        Connection connection = null;
 
-        Libro libro = new Libro(idLibro, titulo, autor, isbn, editorial, añoPublicacion, categoria, estado);
-        try {
-            libroDAO.modificarLibro(libro);
-            System.out.println("Libro modificado exitosamente.");
-        } catch (SQLException e) {
-            System.err.println("Error al modificar el libro: " + e.getMessage());
-        }
-    }
-
-    private void eliminarLibro() {
-        System.out.print("Ingrese el ID del libro a eliminar: ");
-        int idLibro = scanner.nextInt();
-        try {
-            libroDAO.eliminarLibro(idLibro);
-            System.out.println("Libro eliminado exitosamente.");
-        } catch (SQLException e) {
-            System.err.println("Error al eliminar el libro: " + e.getMessage());
-        }
-    }
-
-    private void registrarUsuario() {
-        System.out.print("Ingrese el ID del usuario: ");
-        int idUsuario = scanner.nextInt();
-        scanner.nextLine();
-        System.out.print("Ingrese el número del usuario: ");
-        int numero = scanner.nextInt();
-        scanner.nextLine();
-        System.out.print("Ingrese los apellidos del usuario: ");
-        String apellidos = scanner.nextLine();
-        System.out.print("Ingrese el correo electrónico del usuario: ");
-        String correoElectronico = scanner.nextLine();
-        System.out.print("Ingrese el teléfono del usuario: ");
-        String telefono = scanner.nextLine();
-        System.out.print("Ingrese el rol del usuario: ");
-        String rol = scanner.nextLine();
-        System.out.print("Ingrese la fecha de registro del usuario (YYYY-MM-DD): ");
-        Date fechaRegistro = Date.valueOf(scanner.nextLine());
-
-        Usuario usuario = new Usuario(idUsuario, numero, apellidos, correoElectronico, telefono, rol, fechaRegistro);
-        try {
-            usuarioDAO.registrarUsuario(usuario);
-            System.out.println("Usuario registrado exitosamente.");
-        } catch (SQLException e) {
-            System.err.println("Error al registrar el usuario: " + e.getMessage());
-        }
-    }
-
-    private void modificarUsuario() {
-        System.out.print("Ingrese el ID del usuario a modificar: ");
-        int idUsuario = scanner.nextInt();
-        scanner.nextLine();
-        System.out.print("Ingrese el nuevo número del usuario: ");
-        int numero = scanner.nextInt();
-        scanner.nextLine();
-        System.out.print("Ingrese los nuevos apellidos del usuario: ");
-        String apellidos = scanner.nextLine();
-        System.out.print("Ingrese el nuevo correo electrónico del usuario: ");
-        String correoElectronico = scanner.nextLine();
-        System.out.print("Ingrese el nuevo teléfono del usuario: ");
-        String telefono = scanner.nextLine();
-        System.out.print("Ingrese el nuevo rol del usuario: ");
-        String rol = scanner.nextLine();
-        System.out.print("Ingrese la nueva fecha de registro del usuario (YYYY-MM-DD): ");
-        Date fechaRegistro = Date.valueOf(scanner.nextLine());
-
-        Usuario usuario = new Usuario(idUsuario, numero, apellidos, correoElectronico, telefono, rol, fechaRegistro);
-        try {
-            usuarioDAO.modificarUsuario(usuario);
-            System.out.println("Usuario modificado exitosamente.");
-        } catch (SQLException e) {
-            System.err.println("Error al modificar el usuario: " + e.getMessage());
-        }
-    }
-
-    private void eliminarUsuario() {
-        System.out.print("Ingrese el ID del usuario a eliminar: ");
-        int idUsuario = scanner.nextInt();
-        try {
-            usuarioDAO.eliminarUsuario(idUsuario);
-            System.out.println("Usuario eliminado exitosamente.");
-        } catch (SQLException e) {
-            System.err.println("Error al eliminar el usuario: " + e.getMessage());
-        }
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                new InterfazBibliotecario(connection);
+            }
+        });
     }
 }
