@@ -1,8 +1,9 @@
 package biblioteca;
 
+
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Scanner;
 
 public class InterfazBibliotecario {

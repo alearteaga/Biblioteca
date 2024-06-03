@@ -1,10 +1,10 @@
 package biblioteca;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
-import java.sql.Date;
 
 public class InterfazLector {
     private LibroDAO libroDAO;
@@ -52,7 +52,7 @@ public class InterfazLector {
 
     private void consultarLibros() {
         try {
-            List<Libro> libros = libroDAO.obtenerTodosLosLibros();
+            List<Libro> libros = libroDAO.obtenerLibrosDisponibles();
             for (Libro libro : libros) {
                 System.out.println(libro);
             }
