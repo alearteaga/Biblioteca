@@ -2,6 +2,7 @@ package biblioteca;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class PrestamoDAO {
@@ -48,6 +49,26 @@ public class PrestamoDAO {
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, idPrestamo);
             statement.executeUpdate();
+        }
+    }
+
+    public Prestamo obtenerPrestamoPorId(int idPrestamo) throws SQLException {
+        String query = "SELECT * FROM prestamos WHERE id_prestamo = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, idPrestamo);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    int idLibro = resultSet.getInt("id_libro");
+                    int idUsuario = resultSet.getInt("id_usuario");
+                    Date fechaPrestamo = resultSet.getDate("fecha_prestamo");
+                    Date fechaRetornoPrevista = resultSet.getDate("fecha_retorno_prevista");
+                    Date fechaRetornoReal = resultSet.getDate("fecha_retorno_real");
+                    String estado = resultSet.getString("estado");
+                    return new Prestamo(idPrestamo, idLibro, idUsuario, fechaPrestamo, fechaRetornoPrevista, fechaRetornoReal, estado);
+                } else {
+                    return null;
+                }
+            }
         }
     }
 }

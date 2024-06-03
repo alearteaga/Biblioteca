@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
+import java.sql.Date;
 
 public class InterfazLector {
     private LibroDAO libroDAO;
