@@ -2,14 +2,15 @@ package biblioteca;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
 public class InterfazUsuarios extends JFrame {
     private UsuarioDAO usuarioDAO;
-    private JTextField idField, numeroField, apellidosField, correoField, telefonoField, rolField, fechaField;
+    private JTextField idField, numeroField, apellidosField, correoField, telefonoField, rolField, fechaRegistroField;
     private JTable usuariosTable;
 
     public InterfazUsuarios(Connection connection) {
@@ -33,7 +34,7 @@ public class InterfazUsuarios extends JFrame {
         correoField = new JTextField();
         telefonoField = new JTextField();
         rolField = new JTextField();
-        fechaField = new JTextField();
+        fechaRegistroField = new JTextField();
 
         formPanel.add(new JLabel("ID:"));
         formPanel.add(idField);
@@ -41,21 +42,27 @@ public class InterfazUsuarios extends JFrame {
         formPanel.add(numeroField);
         formPanel.add(new JLabel("Apellidos:"));
         formPanel.add(apellidosField);
-        formPanel.add(new JLabel("Correo Electrónico:"));
+        formPanel.add(new JLabel("Correo:"));
         formPanel.add(correoField);
         formPanel.add(new JLabel("Teléfono:"));
         formPanel.add(telefonoField);
         formPanel.add(new JLabel("Rol:"));
         formPanel.add(rolField);
         formPanel.add(new JLabel("Fecha de Registro:"));
-        formPanel.add(fechaField);
+        formPanel.add(fechaRegistroField);
 
         // Botones
         JPanel buttonPanel = new JPanel();
 
-        JButton addButton = new JButton("Registrar");
+        JButton addButton = new JButton("Agregar");
         addButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                if (numeroField.getText().isEmpty() || apellidosField.getText().isEmpty() || correoField.getText().isEmpty() ||
+                        telefonoField.getText().isEmpty() || rolField.getText().isEmpty() || fechaRegistroField.getText().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Todos los campos deben ser llenados.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
                 try {
                     Usuario usuario = new Usuario(
                             Integer.parseInt(idField.getText()),
@@ -64,7 +71,7 @@ public class InterfazUsuarios extends JFrame {
                             correoField.getText(),
                             telefonoField.getText(),
                             rolField.getText(),
-                            new java.util.Date(fechaField.getText())
+                            java.sql.Date.valueOf(fechaRegistroField.getText())
                     );
                     usuarioDAO.agregarUsuario(usuario);
                     cargarUsuarios();
@@ -78,6 +85,12 @@ public class InterfazUsuarios extends JFrame {
         JButton updateButton = new JButton("Modificar");
         updateButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                if (numeroField.getText().isEmpty() || apellidosField.getText().isEmpty() || correoField.getText().isEmpty() ||
+                        telefonoField.getText().isEmpty() || rolField.getText().isEmpty() || fechaRegistroField.getText().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Todos los campos deben ser llenados.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
                 try {
                     Usuario usuario = new Usuario(
                             Integer.parseInt(idField.getText()),
@@ -86,7 +99,7 @@ public class InterfazUsuarios extends JFrame {
                             correoField.getText(),
                             telefonoField.getText(),
                             rolField.getText(),
-                            new java.util.Date(fechaField.getText())
+                            java.sql.Date.valueOf(fechaRegistroField.getText())
                     );
                     usuarioDAO.modificarUsuario(usuario);
                     cargarUsuarios();
@@ -133,4 +146,3 @@ public class InterfazUsuarios extends JFrame {
         }
     }
 }
-

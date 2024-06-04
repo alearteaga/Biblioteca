@@ -2,14 +2,15 @@ package biblioteca;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
 public class InterfazPrestamos extends JFrame {
     private PrestamoDAO prestamoDAO;
-    private JTextField idField, libroIdField, usuarioIdField, fechaPrestamoField, fechaPrevistaField, fechaRealField, estadoField;
+    private JTextField idField, libroIdField, usuarioIdField, fechaPrestamoField, fechaPrevistaRetornoField, fechaRealRetornoField, estadoField;
     private JTable prestamosTable;
 
     public InterfazPrestamos(Connection connection) {
@@ -31,22 +32,22 @@ public class InterfazPrestamos extends JFrame {
         libroIdField = new JTextField();
         usuarioIdField = new JTextField();
         fechaPrestamoField = new JTextField();
-        fechaPrevistaField = new JTextField();
-        fechaRealField = new JTextField();
+        fechaPrevistaRetornoField = new JTextField();
+        fechaRealRetornoField = new JTextField();
         estadoField = new JTextField();
 
         formPanel.add(new JLabel("ID:"));
         formPanel.add(idField);
-        formPanel.add(new JLabel("ID del Libro:"));
+        formPanel.add(new JLabel("Libro ID:"));
         formPanel.add(libroIdField);
-        formPanel.add(new JLabel("ID del Usuario:"));
+        formPanel.add(new JLabel("Usuario ID:"));
         formPanel.add(usuarioIdField);
         formPanel.add(new JLabel("Fecha de Préstamo:"));
         formPanel.add(fechaPrestamoField);
         formPanel.add(new JLabel("Fecha Prevista de Retorno:"));
-        formPanel.add(fechaPrevistaField);
+        formPanel.add(fechaPrevistaRetornoField);
         formPanel.add(new JLabel("Fecha Real de Retorno:"));
-        formPanel.add(fechaRealField);
+        formPanel.add(fechaRealRetornoField);
         formPanel.add(new JLabel("Estado:"));
         formPanel.add(estadoField);
 
@@ -56,14 +57,20 @@ public class InterfazPrestamos extends JFrame {
         JButton addButton = new JButton("Agregar");
         addButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                if (libroIdField.getText().isEmpty() || usuarioIdField.getText().isEmpty() || fechaPrestamoField.getText().isEmpty() ||
+                        fechaPrevistaRetornoField.getText().isEmpty() || estadoField.getText().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Todos los campos deben ser llenados.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
                 try {
                     Prestamo prestamo = new Prestamo(
                             Integer.parseInt(idField.getText()),
                             Integer.parseInt(libroIdField.getText()),
                             Integer.parseInt(usuarioIdField.getText()),
-                            new java.util.Date(fechaPrestamoField.getText()),
-                            new java.util.Date(fechaPrevistaField.getText()),
-                            new java.util.Date(fechaRealField.getText()),
+                            java.sql.Date.valueOf(fechaPrestamoField.getText()),
+                            java.sql.Date.valueOf(fechaPrevistaRetornoField.getText()),
+                            fechaRealRetornoField.getText().isEmpty() ? null : java.sql.Date.valueOf(fechaRealRetornoField.getText()),
                             estadoField.getText()
                     );
                     prestamoDAO.agregarPrestamo(prestamo);
@@ -78,17 +85,23 @@ public class InterfazPrestamos extends JFrame {
         JButton updateButton = new JButton("Modificar");
         updateButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                if (libroIdField.getText().isEmpty() || usuarioIdField.getText().isEmpty() || fechaPrestamoField.getText().isEmpty() ||
+                        fechaPrevistaRetornoField.getText().isEmpty() || estadoField.getText().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Todos los campos deben ser llenados.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
                 try {
                     Prestamo prestamo = new Prestamo(
                             Integer.parseInt(idField.getText()),
                             Integer.parseInt(libroIdField.getText()),
                             Integer.parseInt(usuarioIdField.getText()),
-                            new java.util.Date(fechaPrestamoField.getText()),
-                            new java.util.Date(fechaPrevistaField.getText()),
-                            new java.util.Date(fechaRealField.getText()),
+                            java.sql.Date.valueOf(fechaPrestamoField.getText()),
+                            java.sql.Date.valueOf(fechaPrevistaRetornoField.getText()),
+                            fechaRealRetornoField.getText().isEmpty() ? null : java.sql.Date.valueOf(fechaRealRetornoField.getText()),
                             estadoField.getText()
                     );
-                    prestamoDAO.actualizarPrestamo(prestamo);
+                    prestamoDAO.modificarPrestamo(prestamo);
                     cargarPrestamos();
                 } catch (SQLException ex) {
                     ex.printStackTrace();

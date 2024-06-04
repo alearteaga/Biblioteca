@@ -5,7 +5,7 @@ import javax.swing.table.AbstractTableModel;
 
 public class PrestamoTableModel extends AbstractTableModel {
     private List<Prestamo> prestamos;
-    private final String[] columnNames = {"ID", "ID Libro", "ID Usuario", "Fecha Préstamo", "Fecha Retorno Prevista", "Fecha Retorno Real", "Estado"};
+    private String[] columnNames = {"ID", "Libro ID", "Usuario ID", "Fecha de Préstamo", "Fecha Prevista de Retorno", "Fecha Real de Retorno", "Estado"};
 
     public PrestamoTableModel(List<Prestamo> prestamos) {
         this.prestamos = prestamos;
@@ -30,22 +30,14 @@ public class PrestamoTableModel extends AbstractTableModel {
     public Object getValueAt(int rowIndex, int columnIndex) {
         Prestamo prestamo = prestamos.get(rowIndex);
         switch (columnIndex) {
-            case 0:
-                return prestamo.getIdPrestamo();
-            case 1:
-                return prestamo.getIdLibro();
-            case 2:
-                return prestamo.getIdUsuario();
-            case 3:
-                return prestamo.getFechaPrestamo();
-            case 4:
-                return prestamo.getFechaRetornoPrevista();
-            case 5:
-                return prestamo.getFechaRetornoReal();
-            case 6:
-                return prestamo.getEstado();
-            default:
-                return null;
+            case 0: return prestamo.getId();
+            case 1: return prestamo.getLibroId();
+            case 2: return prestamo.getUsuarioId();
+            case 3: return prestamo.getFechaPrestamo();
+            case 4: return prestamo.getFechaPrevistaRetorno();
+            case 5: return prestamo.getFechaRealRetorno();
+            case 6: return prestamo.getEstado();
+            default: return null;
         }
     }
 }
