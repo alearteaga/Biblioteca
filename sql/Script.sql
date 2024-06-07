@@ -5,6 +5,7 @@ CREATE DATABASE biblioteca;
 USE biblioteca;
 
 -- Crear tabla Usuarios
+<<<<<<< HEAD
 CREATE TABLE Usuarios (
     id_usuario INT PRIMARY KEY AUTO_INCREMENT,
     nombre VARCHAR(255) NOT NULL,
@@ -52,3 +53,38 @@ CREATE TABLE Login (
     FOREIGN KEY (correo) REFERENCES Usuarios(correo),
     FOREIGN KEY (contrasena) REFERENCES Usuarios(contrasena)
 );
+=======
+CREATE TABLE usuarios (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    numero INT NOT NULL,
+    apellidos VARCHAR(100) NOT NULL,
+    correo VARCHAR(100) NOT NULL,
+    telefono VARCHAR(15),
+    rol VARCHAR(50),
+    fecha_registro DATE NOT NULL
+);
+
+-- Crear tabla Libros
+CREATE TABLE libros (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    isbn VARCHAR(20) NOT NULL,
+    titulo VARCHAR(100) NOT NULL,
+    autor VARCHAR(100) NOT NULL,
+    editorial VARCHAR(100),
+    num_paginas INT,
+    anio_publicacion INT
+);
+
+-- Crear tabla Prestamos
+CREATE TABLE prestamos (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    libro_id INT NOT NULL,
+    usuario_id INT NOT NULL,
+    fecha_prestamo DATE NOT NULL,
+    fecha_prevista DATE NOT NULL,
+    fecha_real DATE,
+    estado VARCHAR(50),
+    FOREIGN KEY (libro_id) REFERENCES libros(id),
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+);
+>>>>>>> c3098a8f9d69fd1707b5cd8d14d24d8ce515bcf6
